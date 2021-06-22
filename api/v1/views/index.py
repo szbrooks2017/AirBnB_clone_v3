@@ -16,6 +16,7 @@ def app_views_route():
     """ jsonify our code"""
     return jsonify({"status": "OK"})
 
+
 @app_views.route('/stats')
 def stats():
     """returns json inventory of object counts"""
