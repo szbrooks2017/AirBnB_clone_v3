@@ -3,6 +3,7 @@
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.city import City
+from models.state import State
 from models import storage
 
 
@@ -10,12 +11,15 @@ from models import storage
                  strict_slashes=False)
 def all_cities(state_id):
     """ getting all cities in given state"""
+    states = storage.all(State)
+    if "State." + str(state_id) not in states:
+        abort(404)
     resource = storage.all(City)
-    obj = []
+    objl = []
     for value in resource.values():
-        if obj.state_id == state_id:
-            obj.append(value.to_dict())
-    return jsonify(obj)
+        if value.state_id == state_id:
+            objl.append(value.to_dict())
+    return jsonify(objl)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
