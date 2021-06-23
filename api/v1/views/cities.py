@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-""" creating resources"""
+""" module for city API functions"""
 from api.v1.views import app_views
-from flask import jsonify, request, make_response, abort
+from flask import jsonify, request, abort
 from models.city import City
 from models import storage
-import json
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET'],
@@ -31,7 +30,7 @@ def get_city_id(city_id):
 @app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_city(city_id):
-    """ deleting"""
+    """ deleting city"""
     value = storage.get(City, city_id)
     if value is None:
         abort(404)
