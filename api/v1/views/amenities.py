@@ -16,7 +16,8 @@ def all_amenities():
     return jsonify(obj)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+                 strict_slashes=False)
 def get_amenity_id(amenity_id):
     """ getting amenity id"""
     value = storage.get(Amenity, amenity_id)
@@ -52,7 +53,8 @@ def post_amenity():
     return jsonify(obj), 201
 
 
-@app_views.route('amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('amenities/<amenity_id>', methods=['PUT'],
+                 strict_slashes=False)
 def update_amenity(amenity_id):
     """ updating a new amenity resource"""
     obj = storage.get(Amenity, amenity_id)

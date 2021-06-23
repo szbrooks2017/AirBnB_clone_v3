@@ -8,7 +8,8 @@ from models.user import User
 from models import storage
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+                 strict_slashes=False)
 def all_reviews(place_id):
     """ getting review resource"""
     places = storage.all(Place)
@@ -43,7 +44,8 @@ def delete_review(review_id):
     return jsonify({}), 200
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
 def post_review(place_id):
     """creating a new review resource"""
     if storage.get(Place, place_id) is None:
@@ -51,6 +53,7 @@ def post_review(place_id):
     if not request.is_json:
         abort(400, description="Not a JSON")
     data = request.get_json()
+    data['place_id'] = place_id
     if "user_id" not in data:
         abort(400, description="Missing user_id")
     if storage.get(User, data['user_id']) is None:

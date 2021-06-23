@@ -8,7 +8,8 @@ from models.user import User
 from models import storage
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
 def all_places(city_id):
     """ getting place resource"""
     cities = storage.all(City)
@@ -43,7 +44,8 @@ def delete_place(place_id):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def post_place(city_id):
     """creating a new place resource"""
     if storage.get(City, city_id) is None:
@@ -51,6 +53,7 @@ def post_place(city_id):
     if not request.is_json:
         abort(400, description="Not a JSON")
     data = request.get_json()
+    data['city_id'] = city_id
     if "user_id" not in data:
         abort(400, description="Missing user_id")
     if storage.get(User, data['user_id']) is None:
