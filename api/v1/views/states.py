@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """ creating resources"""
 from api.v1.views import app_views
-from flask import jsonify
+from flask import jsonify, request
 from models.state import State
 from models import storage
+import json
 resource = storage.all(State)
 
 
@@ -45,7 +46,7 @@ def post_state():
     data = request.get_json()
     if not data['name']:
         abort(400, 'Missing name')
-    obj = State(**json.dumps(data))
+    obj = State(**data)
     storage.new(obj)
     storage.save()
     obj = obj.to_dict()
@@ -64,11 +65,10 @@ def update_state(state_id):
 
     if not request.is_json:
         abort(400, 'Not a JSON')
-    data = request.get_json()
-    obj_dict = json.dumps(data)
+    obj_dict = request.get_json()
     bad_list = ['id', 'created_at', 'updated_at']
     for key, value in obj_dict.items():
         if key not in bad_list:
-            obj[key] = value
+            setattr(obj, key, value)
     storage.save()
-    return jsonify(obj.to_dict), 200
+    return jsonify(obj.to_dict()), 200
