@@ -3,8 +3,10 @@
 Contains the TestFileStorageDocs classes
 """
 
+from console import HBNBCommand
 from datetime import datetime
 import inspect
+from io import StringIO
 import models
 from models.engine import file_storage
 from models.amenity import Amenity
@@ -18,6 +20,7 @@ import json
 import os
 import pep8
 import unittest
+from unittest.mock import patch
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -113,3 +116,21 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """test that gets"""
+        state1 = State(name="justcallmejacob")
+        state1.save()
+        state_id = state1.id
+        get_total = models.storage.get(State, state1.id)
+        self.assertEqual(get_total, state1)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """test for count"""
+        count1 = models.storage.count(State)
+        state1 = State(name="justcallmejacob")
+        state1.save()
+        count2 = models.storage.count(State)
+        self.assertNotEqual(count1, count2)
